@@ -281,6 +281,76 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Dumping routines for database 'test4'
+--
+/*!50003 DROP FUNCTION IF EXISTS `fs_entity` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_UNSIGNED_SUBTRACTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `fs_entity`(
+	`in_name` VARCHAR( 40 )
+) RETURNS text CHARSET utf8mb4
+BEGIN
+	RETURN (
+		SELECT
+			`e1`.`value` AS `result`
+        FROM
+			`entity` AS `e1`
+		WHERE
+			( `e1`.`name` = `in_name` )
+		LIMIT 1
+    ) ;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `fs_expired` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_UNSIGNED_SUBTRACTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `fs_expired`(
+	`in_datetime` DATETIME
+) RETURNS tinyint(1) unsigned
+RETURN unix_timestamp( ) - unix_timestamp( `in_datetime` ) > `fs_entity`( 'pass.expires' ) ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `fs_expires` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_UNSIGNED_SUBTRACTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` FUNCTION `fs_expires`() RETURNS datetime
+    DETERMINISTIC
+RETURN from_unixtime( `fs_entity`( 'session.expires' ) + unix_timestamp( ) ) ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
 -- Final view structure for view `v_user_online`
 --
 
@@ -307,4 +377,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-20  2:11:45
+-- Dump completed on 2017-08-20  2:34:31
