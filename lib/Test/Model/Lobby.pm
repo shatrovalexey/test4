@@ -105,7 +105,7 @@ sub online( $ ) {
 	my ( $self ) = @_ ;
 	my $dbh = $self->__dbh( ) || return +( ) ;
 
-	my @lobbyes = $dbh->selectall_hashref( << '.' ) || return +( ) ;
+	my @lobbyes = $dbh->selectall_hashref( << '.' , undef( ) , 1 ) || return +( ) ;
 SELECT
 	`l1`.*
 FROM
@@ -149,7 +149,7 @@ sub suggestion( $$ ) {
 
 	my $dbh = $self->__dbh( ) || return +( ) ;
 
-	$dbh->selectall_hashref( << '.' , @last_user_pass{ +qw(lobby_card_id lobby_card_id) } ) ;
+	$dbh->selectall_hashref( << '.' , undef( ) , @last_user_pass{ +qw(lobby_card_id lobby_card_id) } ) ;
 SELECT
 	`t1`.*
 FROM
@@ -160,7 +160,7 @@ FROM
 			`lobby_card` AS `lc1`
 		WHERE
 			( `lc1`.`id` = ? )
-		UNION DISTINCT
+		UNION ALL
 		SELECT
 			`lc1`.*
 		FROM
@@ -168,7 +168,6 @@ FROM
 		WHERE
 			( `lc1`.`id` <> ? )
 		ORDER BY
-			`lc1`.`id` = ? DESC ,
 			rand( ) ASC
 		LIMIT 2
 	) AS `t1`
