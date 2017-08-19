@@ -49,12 +49,12 @@ sub __object( $$;@ ) {
 
 	$self->{ 'object' } = { } unless exists( $self->{ 'object' } ) ;
 
-	return $self->__coalesce( $self->{ 'object' } , $package , sub {
+	$self->__coalesce( $self->{ 'object' } , $package , sub {
 		require( $package ) ;
 
 		$package->import( ) ;
 		$package->new( 'creator' => $self , @_ ) ;
-	} ) || +( ) ;
+	} ) ;
 }
 
 sub __sub( $;$ ) {
