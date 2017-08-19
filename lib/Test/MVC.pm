@@ -46,10 +46,7 @@ sub __join_package( $$;$ ) {
 
 sub __object( $$;@ ) {
 	my ( $self , $package ) = splice( @_ , 0 , 2 ) ;
-
-	$self->{ 'object' } = { } unless exists( $self->{ 'object' } ) ;
-
-	$self->__coalesce( $self->{ 'object' } , $package , sub {
+	$self->__coalesce( ( $self->{ 'object' } ||= { } ) , $package , sub {
 		require( $package ) ;
 
 		$package->import( ) ;
