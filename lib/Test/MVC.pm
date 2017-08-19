@@ -21,9 +21,7 @@ sub __component( $$;% ) {
 	my $package_name = $self->{ 'parent_package' } ;
 	my $package = $self->__join_package( $package_name , $class_name ) ;
 
-	$self->__coalesce( lc( $type ) => sub {
-		$package->new( 'creator' => $self , %args ) ;
-	} ) ;
+	$self->__coalesce( lc( $type ) => sub { $self->__object( $package , %args ) } ) ;
 }
 
 sub __split_package( $;$ ) { $_[ -1 ] =~ m{(.*)\Q${\$_[ 0 ]->PACKAGE_SEPARATOR}\E([^=]*?)}os }
