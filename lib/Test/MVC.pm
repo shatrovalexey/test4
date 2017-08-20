@@ -49,7 +49,7 @@ sub __object( $$;@ ) {
 	} ) ;
 }
 sub __method( $$$;% ) {
-	my ( $self , $package , $method ) = splice( @_ , 0 , 2 ) ;
+	my ( $self , $package , $method ) = splice( @_ , 0 , 3 ) ;
 	my $result = eval {
 		$self->__object( $package , @_ )->$method( $self ) ;
 	} ;
