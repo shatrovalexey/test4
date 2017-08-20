@@ -5,7 +5,7 @@ use parent qw(Test::MVC) ;
 
 + 1 ;
 
-sub __dbh( $ ) { $_[ 0 ]{ 'app' }->dbh( ) }
+sub __dbh( $ ) { $_[ 0 ]{ 'creator' }{ 'creator' }->dbh( ) }
 sub __last_insert_id( $ ) {
 	my $dbh = $_[ 0 ]->__dbh( ) || return +( ) ;
 
