@@ -2,9 +2,11 @@ package Test::MVC ;
 use strict ;
 use warnings ;
 use parent qw(Test::Base) ;
+use DBI ;
 use Test::Controller ;
 use Test::Model ;
 use Test::View ;
+use Test::DBA ;
 use constant 'PACKAGE_SEPARATOR' => '::' ;
 + 1 ;
 
@@ -12,9 +14,19 @@ sub new( $;% ) {
 	my $class = shift( @_ ) ;
 	my ( $parent_package , $class_name ) = $class->__split_package( ) ;
 
-	$class->SUPER::new( 'parent_package' => $parent_package , 'class_name' => $class_name , @_ ) ;
+	$class->SUPER::new(
+		'parent_package' => $parent_package ,
+		'class_name' => $class_name ,
+		@_
+	) ;
 }
+sub __dbh( $ ) {
+	my ( $self ) = @_ ;
 
+	return $self->{ 'dbh' } if exists( $self->{ 'dbh' } ) ;
+
+	$self->{ 'dbh' } = $self->__object( 'Test::DBA' ) ;
+}
 sub __component( $$;% ) {
 	my ( $self , $type , %args ) = @_ ;
 	my $package = $self->__join_package( $self->{ 'parent_package' } , ucfirst( $type ) ) ;

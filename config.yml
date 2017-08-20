@@ -50,3 +50,14 @@ actions:
    auth: User::auth
    online: User::online
    lobby: Lobby::online
+db:
+   dsn_pattern: dbi:mysql:dbname=%s,host=%s,port=%d
+   dbname: test3
+   host: localhost
+   port: 3306
+   login: test
+   passwd: test
+   attrs:
+      ChopBlanks: 1
+      LongTruncOk: 1
+      AutoCommit: 1
