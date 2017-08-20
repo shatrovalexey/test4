@@ -1,7 +1,7 @@
 package Test::MVC ;
 use strict ;
 use warnings ;
-use parent +qw(Test::Base) ;
+use parent qw(Test::Base) ;
 use Test::Controller ;
 use Test::Model ;
 use Test::View ;
