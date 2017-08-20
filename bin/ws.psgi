@@ -11,16 +11,13 @@ my $app = Test::WS->new( ) ;
 
 get '/' => sub {
 	&template( 'index' ) ;
-	// print( &Dumper( @_ ) ) ;
+	# print( &Dumper( @_ ) ) ;
 } ;
 get '/new_listener' => sub {
-	my $self = shift( @_ ) ;
-
-	$self->request->env->{ 'hippie.listener' }->subscribe( $app->channel( ) ) ;
+	$app->subscribe( @_ ) ;
 };
 get '/message' => sub {
-	my ( $self ) = @_ ;
-	my $result = $app->dispatch( $self ) ;
+	my $result = $app->dispatch( @_ ) ;
 
 	$app->publish( $result ) ;
 };

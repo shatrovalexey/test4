@@ -5,7 +5,14 @@ use parent qw(Test::MVC) ;
 
 + 1 ;
 
-sub __dbh( $ ) { $_[ 0 ]{ 'creator' }{ 'creator' }->dbh( ) }
+sub __dbh( $ ) {
+	use Data::Dumper ;
+
+	print( &Dumper( $_[ 0 ]{ 'dancer' }{ 'config' } ) ) ;
+	exit( 0 ) ;
+
+	$_[ 0 ]{ 'creator' }{ 'creator' }->dbh( )
+}
 sub __last_insert_id( $ ) {
 	my $dbh = $_[ 0 ]->__dbh( ) || return +( ) ;
 

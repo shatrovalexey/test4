@@ -21,7 +21,6 @@ sub __component( $$;% ) {
 
 	$self->__coalesce( lc( $type ) => sub { $self->__object( $package , %args ) } ) ;
 }
-
 sub __split_package( $;$ ) { $_[ -1 ] =~ m{(.*)\Q${\$_[ 0 ]->PACKAGE_SEPARATOR}\E([^=]*?)}os }
 sub __join_package( $$;$ ) {
 	my $self = shift( @_ ) ;
@@ -30,7 +29,6 @@ sub __join_package( $$;$ ) {
 
 	join( $self->PACKAGE_SEPARATOR , @_ ) ;
 }
-
 *__controller = *__model = *__view = sub( $;% ) {
 	my $self = shift( @_ ) ;
 	$self->__component( $' , @_ ) if
@@ -46,9 +44,7 @@ sub __object( $$;@ ) {
 }
 sub __method( $$$;% ) {
 	my ( $self , $package , $method ) = splice( @_ , 0 , 3 ) ;
-	my $result = eval {
-		$self->__object( $package , @_ )->$method( $self ) ;
-	} ;
+	my $result = eval { $self->__object( $package , @_ )->$method( $self ) } ;
 
 	warn( $@ ) and return +( ) if $@ ;
 

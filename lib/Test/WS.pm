@@ -21,11 +21,14 @@ sub build( $ ) {
 }
 
 sub publish( $;@ ) { shift( @_ )->__view( )->render( @_ ) }
-
-sub dispatch( $$ ) {
+sub subscribe( $$;@ ) {
+	my ( $self , $dancer ) = @_ ;
+	$self->{ 'dancer' } = $dancer ;
+	$self->{ 'dancer' }->request->env->{ 'hippie.listener' }->subscribe( $self->channel( ) ) ;
+}
+sub dispatch( $$;@ ) {
 	my ( $self , $dancer ) = @_ ;
 
-	$self->{ 'dancer' } = $dancer ;
 	$self->__controller( )->dispatch( 'data' => $self->data( ) ) ;
 }
 
