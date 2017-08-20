@@ -33,17 +33,13 @@ sub __join_package( $$;$ ) {
 
 *__controller = *__model = *__view = sub( $;% ) {
 	my $self = shift( @_ ) ;
-	my ( undef( ) , $type ) = $self->__split_package( $self->__sub( ) ) ;
-
-	return +( ) unless $type =~ m{^_*}os ;
-
-	$self->__component( $' , @_ ) ;
+	$self->__component( $' , @_ ) if
+		( $self->__split_package( $self->__sub( ) ) )[ 1 ] =~ m{^_*}os ;
 } ;
 sub __object( $$;@ ) {
 	my ( $self , $package ) = splice( @_ , 0 , 2 ) ;
 	$self->__coalesce( ( $self->{ 'object' } ||= { } ) , $package , sub( $;% ) {
 		require( $package ) ;
-
 		$package->import( ) ;
 		$package->new( 'creator' => $self , @_ ) ;
 	} ) ;
