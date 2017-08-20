@@ -17,9 +17,7 @@ sub new( $;% ) {
 
 sub __component( $$;% ) {
 	my ( $self , $type , %args ) = @_ ;
-	my $class_name = ucfirst( $type ) ;
-	my $package_name = $self->{ 'parent_package' } ;
-	my $package = $self->__join_package( $package_name , $class_name ) ;
+	my $package = $self->__join_package( $self->{ 'parent_package' } , ucfirst( $type ) ) ;
 
 	$self->__coalesce( lc( $type ) => sub { $self->__object( $package , %args ) } ) ;
 }
@@ -41,7 +39,6 @@ sub __join_package( $$;$ ) {
 
 	$self->__component( $' , @_ ) ;
 } ;
-
 sub __object( $$;@ ) {
 	my ( $self , $package ) = splice( @_ , 0 , 2 ) ;
 	$self->__coalesce( ( $self->{ 'object' } ||= { } ) , $package , sub( $;% ) {
@@ -51,11 +48,19 @@ sub __object( $$;@ ) {
 		$package->new( 'creator' => $self , @_ ) ;
 	} ) ;
 }
+sub __method( $$$;% ) {
+	my ( $self , $package , $method ) = splice( @_ , 0 , 2 ) ;
+	my $result = eval {
+		$self->__object( $package , @_ )->$method( $self ) ;
+	} ;
 
+	warn( $@ ) and return +( ) if $@ ;
+
+	+ $result ;
+}
 sub __sub( $;$ ) {
 	my ( $self , $level ) = @_ ;
 	my $sub_ref = ( caller( $level || 1 ) )[ 3 ] ;
 	my $sub = ( $self->__split_package( $sub_ref ) )[ 1 ] ;
 }
-
 sub __result( $;@ ) { + { +shift( @_ )->__sub( 2 ) => \@_ } }

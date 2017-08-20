@@ -18,12 +18,3 @@ sub dispatch( $$;@ ) {
 
 	+ $result ;
 }
-
-sub __object( $$;@ ) {
-	my ( $self , $package , @args ) = @_ ;
-	$self->__coalesce( ( $self->{ '__object' } ||= { } ) , $package , sub {
-		require( $package ) ;
-		$package->import( ) ;
-		$package->new( 'creator' => $self , @args ) ;
-	} ) ;
-}
