@@ -44,7 +44,7 @@ sub __join_package( $$;$ ) {
 
 sub __object( $$;@ ) {
 	my ( $self , $package ) = splice( @_ , 0 , 2 ) ;
-	$self->__coalesce( ( $self->{ 'object' } ||= { } ) , $package , sub {
+	$self->__coalesce( ( $self->{ 'object' } ||= { } ) , $package , sub( $;% ) {
 		require( $package ) ;
 
 		$package->import( ) ;
@@ -54,8 +54,7 @@ sub __object( $$;@ ) {
 
 sub __sub( $;$ ) {
 	my ( $self , $level ) = @_ ;
-	$level = 1 unless defined( $level ) ;
-	my $sub_ref = ( caller( $level ) )[ 3 ] ;
+	my $sub_ref = ( caller( $level || 1 ) )[ 3 ] ;
 	my $sub = ( $self->__split_package( $sub_ref ) )[ 1 ] ;
 }
 
